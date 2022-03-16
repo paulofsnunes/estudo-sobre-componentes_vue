@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./vue.js"></script>
+    <title>Vue.js</title>
+</head>
+
+<body>
+    <div id="app">
+        {{mensagem}}
+        {{totalClientes}}
+        {{contador}}
+        <meu-botao
+        :contador.sync="contador"
+        @origamid="mostrarMensagem"
+        ></meu-botao>
+    </div>
+    
+
+<script type="module">
+
+    const MeuBotao = {
+        name: "MeuBotao",
+        props: ["contador"],
+        data() {
+            return {
+                contadorComponente: this.contador,
+                totalClientes: 200
+            }
+        },
+        template:
+        `
+        <div>
+            <button @click="incrementar">Clique {{contadorComponente}}</button>
+        </div>
+        `,
+        methods: {
+            handleClick() {
+            },
+            incrementar() {
+                this.contadorComponente++;
+                this.$emit("update:contador", this.contadorComponente)
+            }
+        },
+        created() {
+            setTimeout(() => {
+                this.$emit("origamid", this.totalClientes)
+            }, 2000)
+        }
+    }
+
+const vm = new Vue({
+    el: '#app',
+    data: {
+        mensagem: "",
+        totalClientes: 0,
+        contador: 0
+    },
+    components: {
+        MeuBotao
+    },
+    methods: {
+        mostrarMensagem(mensagem) {
+            this.totalClientes = mensagem;
+            // this.mensagem = "Origamid Ocorreu"
+        }
+    }
+});
+
+</script>
+
+</body>
+</html>
